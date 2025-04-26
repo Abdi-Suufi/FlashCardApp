@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import FlashCard from './components/FlashCard';
 import CreateCard from './components/CreateCard';
-import WindowControls from './components/WindowControls';
+import TitleBar from './components/TitleBar';
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -44,13 +44,13 @@ function App() {
 
   return (
     <div className="flex h-screen relative">
-      <WindowControls />
+      <TitleBar />
       <Sidebar 
         onCreateClick={() => setShowCreate(true)}
         cardCount={cards.length}
       />
       
-      <main className="flex-1 p-8 flex items-center justify-center">
+      <main className="flex-1 p-8 flex items-center justify-center mt-8">
         <AnimatePresence mode="wait">
           {showCreate ? (
             <motion.div

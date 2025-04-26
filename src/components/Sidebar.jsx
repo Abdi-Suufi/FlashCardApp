@@ -1,11 +1,20 @@
-import React from 'react';
-import { PlusIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { PlusIcon, BookOpenIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 function Sidebar({ onCreateClick, cardCount }) {
+  const [isMinimized, setIsMinimized] = useState(false);
+
   return (
-    <nav className="w-64 bg-nav-bg backdrop-blur-sm border-r border-white/10 p-4">
+    <nav className={`${isMinimized ? 'w-16' : 'w-64'} bg-nav-bg backdrop-blur-sm border-r border-white/10 p-4 transition-all duration-300 relative`}>
+      <button
+        onClick={() => setIsMinimized(!isMinimized)}
+        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors duration-200"
+      >
+        <ChevronLeftIcon className={`w-5 h-5 ${isMinimized ? 'rotate-180' : ''}`} />
+      </button>
+
       <div className="flex flex-col h-full">
-        <h1 className="text-2xl font-bold mb-8">Flashcards</h1>
+        <h1 className={`text-2xl font-bold mb-8 ${isMinimized ? 'hidden' : ''}`}>Flashcards</h1>
         
         <div className="space-y-2">
           <button
@@ -13,16 +22,16 @@ function Sidebar({ onCreateClick, cardCount }) {
             className="nav-item w-full"
           >
             <PlusIcon className="w-5 h-5" />
-            Create New Card
+            {!isMinimized && <span className="ml-2">Create New Card</span>}
           </button>
           
           <div className="nav-item">
             <BookOpenIcon className="w-5 h-5" />
-            <span>Cards: {cardCount}</span>
+            {!isMinimized && <span className="ml-2">Cards: {cardCount}</span>}
           </div>
         </div>
 
-        <div className="mt-auto text-sm text-white/60">
+        <div className={`mt-auto text-sm text-white/60 ${isMinimized ? 'hidden' : ''}`}>
           <p>Press Space to flip cards</p>
           <p>Use ← → arrows to navigate</p>
         </div>
