@@ -9,15 +9,37 @@ function App() {
   const [cards, setCards] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    loadCategories();
     loadCards();
-  }, []);
+  }, [activeCategory]);
+
+  const loadCategories = async () => {
+    const loadedCategories = await window.electron.getCategories();
+    setCategories(loadedCategories);
+  };
 
   const loadCards = async () => {
-    const loadedCards = await window.electron.getCards();
-    setCards(loadedCards);
+    try {
+      // Pass the activeCategory explicitly (it might have been undefined before)
+      const loadedCards = await window.electron.getCards(activeCategory);
+      console.log(`Loaded ${loadedCards.length} cards for category: ${activeCategory || 'all'}`);
+      setCards(loadedCards);
+      setCurrentCardIndex(0); // Reset current card index when category changes
+    } catch (error) {
+      console.error("Error loading cards:", error);
+      setCards([]);
+    }
   };
+  
+  // Update the useEffect dependency array to ensure it refreshes when needed
+  useEffect(() => {
+    loadCategories();
+    loadCards();
+  }, [activeCategory]);
 
   const handleCreateCard = async (card) => {
     await window.electron.saveCard({
@@ -34,12 +56,26 @@ function App() {
     loadCards();
   };
 
+  const handleSelectCategory = (categoryId) => {
+    setActiveCategory(categoryId);
+  };
+
   const nextCard = () => {
-    setCurrentCardIndex((prev) => (prev + 1) % cards.length);
+    if (cards.length > 0) {
+      setCurrentCardIndex((prev) => (prev + 1) % cards.length);
+    }
   };
 
   const previousCard = () => {
-    setCurrentCardIndex((prev) => (prev - 1 + cards.length) % cards.length);
+    if (cards.length > 0) {
+      setCurrentCardIndex((prev) => (prev - 1 + cards.length) % cards.length);
+    }
+  };
+
+  const getCategoryName = () => {
+    if (!activeCategory) return "All Cards";
+    const category = categories.find(c => c.id === activeCategory);
+    return category ? category.name : "Unknown Category";
   };
 
   return (
@@ -48,9 +84,15 @@ function App() {
       <Sidebar 
         onCreateClick={() => setShowCreate(true)}
         cardCount={cards.length}
+        onSelectCategory={handleSelectCategory}
+        activeCategory={activeCategory}
       />
       
-      <main className="flex-1 p-8 flex items-center justify-center mt-8">
+      <main className="flex-1 p-8 flex flex-col items-center justify-center mt-8">
+        <h2 className="text-xl font-medium mb-6 text-center">
+          {getCategoryName()} ({cards.length} {cards.length === 1 ? 'card' : 'cards'})
+        </h2>
+        
         <AnimatePresence mode="wait">
           {showCreate ? (
             <motion.div
@@ -63,6 +105,7 @@ function App() {
               <CreateCard
                 onSubmit={handleCreateCard}
                 onCancel={() => setShowCreate(false)}
+                activeCategory={activeCategory}
               />
             </motion.div>
           ) : cards.length > 0 ? (
@@ -90,12 +133,12 @@ function App() {
               exit={{ opacity: 0 }}
               className="text-center"
             >
-              <h2 className="text-2xl font-semibold mb-4">No flashcards yet</h2>
+              <h2 className="text-2xl font-semibold mb-4">No flashcards in this category</h2>
               <button
                 onClick={() => setShowCreate(true)}
                 className="btn btn-primary"
               >
-                Create your first card
+                Create a card
               </button>
             </motion.div>
           )}
@@ -105,4 +148,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

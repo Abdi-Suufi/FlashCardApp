@@ -30,14 +30,53 @@ function createWindow() {
   }
 }
 
-// Handle IPC communication for flashcards
-ipcMain.handle('get-cards', () => {
-  return store.get('flashcards', []);
+ipcMain.handle('get-categories', () => {
+  return store.get('categories', []);
 });
 
+ipcMain.on('save-category', (event, category) => {
+  const categories = store.get('categories', []);
+  store.set('categories', [...categories, category]);
+});
+
+ipcMain.on('delete-category', (event, categoryId) => {
+  const categories = store.get('categories', []);
+  store.set('categories', categories.filter(category => category.id !== categoryId));
+  
+  // Also delete or reassign associated cards
+  const cards = store.get('flashcards', []);
+  store.set('flashcards', cards.filter(card => card.categoryId !== categoryId));
+});
+
+ipcMain.on('update-category', (event, updatedCategory) => {
+  const categories = store.get('categories', []);
+  store.set('categories', categories.map(category => 
+    category.id === updatedCategory.id ? updatedCategory : category
+  ));
+});
+
+// Handle IPC communication for flashcards
+ipcMain.handle('get-cards', (event, categoryId) => {
+  const cards = store.get('flashcards', []);
+  
+  // Check if categoryId is null, undefined, or empty string to show all cards
+  if (categoryId === null || categoryId === undefined || categoryId === '') {
+    return cards;
+  }
+  
+  // Otherwise, strictly filter by the specified categoryId
+  return cards.filter(card => card.categoryId === categoryId);
+});
+
+// Make sure save-card is correctly handling the categoryId:
 ipcMain.on('save-card', (event, card) => {
   const cards = store.get('flashcards', []);
-  store.set('flashcards', [...cards, card]);
+  // Ensure card has categoryId (even if it's an empty string for "Uncategorized")
+  const cardToSave = {
+    ...card,
+    categoryId: card.categoryId || '' // Default to empty string if not specified
+  };
+  store.set('flashcards', [...cards, cardToSave]);
 });
 
 ipcMain.on('delete-card', (event, cardId) => {

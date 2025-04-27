@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-function CreateCard({ onSubmit, onCancel }) {
+function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     question: '',
     answer: '',
+    categoryId: activeCategory || ''
   });
+
+  useEffect(() => {
+    loadCategories();
+    
+    // Update categoryId if activeCategory changes
+    setFormData(prev => ({
+      ...prev,
+      categoryId: activeCategory || ''
+    }));
+  }, [activeCategory]);
+
+  const loadCategories = async () => {
+    const loadedCategories = await window.electron.getCategories();
+    setCategories(loadedCategories);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,6 +47,25 @@ function CreateCard({ onSubmit, onCancel }) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Category
+          </label>
+          <select
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+            className="w-full bg-white/5 rounded-lg border border-white/10 p-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+          >
+            <option value="">Uncategorized</option>
+            {categories.map(category => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label className="block text-sm font-medium mb-1">
             Question
@@ -78,4 +114,4 @@ function CreateCard({ onSubmit, onCancel }) {
   );
 }
 
-export default CreateCard; 
+export default CreateCard;
