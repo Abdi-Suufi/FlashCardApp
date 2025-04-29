@@ -18,7 +18,7 @@ function FlashCard({ card, onDelete, onNext, onPrevious, total, current }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [onNext, onPrevious]);
+  }, [onNext, onPrevious, setIsFlipped]);
 
   return (
     <div className="relative">

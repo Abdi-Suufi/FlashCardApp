@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-  getCards: () => ipcRenderer.invoke('get-cards'),
+  getCards: (categoryId) => ipcRenderer.invoke('get-cards', categoryId),
   saveCard: (card) => ipcRenderer.send('save-card', card),
   deleteCard: (cardId) => ipcRenderer.send('delete-card', cardId),
   updateCard: (card) => ipcRenderer.send('update-card', card),
@@ -12,4 +12,4 @@ contextBridge.exposeInMainWorld('electron', {
   saveCategory: (category) => ipcRenderer.send('save-category', category),
   deleteCategory: (categoryId) => ipcRenderer.send('delete-category', categoryId),
   updateCategory: (category) => ipcRenderer.send('update-category', category)
-}); 
+});
