@@ -2,18 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.05);
+}
+
 @layer base {
   html, body {
     @apply h-full w-full;
   }
   body {
-    @apply bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 min-h-screen font-sans text-white overflow-hidden;
+    @apply min-h-screen font-sans overflow-hidden;
   }
 }
 
 @layer components {
   .card {
     @apply bg-card-bg backdrop-blur-sm rounded-xl p-6 shadow-lg transition-all duration-300;
+  }
+
+  .bg-card-bg {
+    background-color: var(--card-bg);
+  }
+
+  .bg-nav-bg {
+    background-color: var(--nav-bg);
   }
 
   .card-front {
@@ -46,8 +59,7 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
-           text-white shadow-lg hover:shadow-xl;
+    @apply bg-gradient-to-r hover:shadow-xl shadow-lg text-white;
   }
 }
 
@@ -67,4 +79,4 @@
   .perspective-1000 {
     perspective: 1000px;
   }
-} 
+}

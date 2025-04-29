@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TrashIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../context/ThemeContext';
 
 function FlashCard({ card, onDelete, onNext, onPrevious, total, current }) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -27,7 +29,7 @@ function FlashCard({ card, onDelete, onNext, onPrevious, total, current }) {
         onClick={() => setIsFlipped(prev => !prev)}
       >
         <div className="card-front p-6">
-          <div className="absolute top-4 right-4 flex items-center gap-2 text-white/60">
+          <div className="absolute top-4 right-4 flex items-center gap-2 opacity-60">
             <span>{current} / {total}</span>
           </div>
           <div className="flex items-center justify-center h-full">
@@ -63,4 +65,4 @@ function FlashCard({ card, onDelete, onNext, onPrevious, total, current }) {
   );
 }
 
-export default FlashCard; 
+export default FlashCard;

@@ -4,13 +4,15 @@ import Sidebar from './components/Sidebar';
 import FlashCard from './components/FlashCard';
 import CreateCard from './components/CreateCard';
 import TitleBar from './components/TitleBar';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
-function App() {
+function AppContent() {
   const [cards, setCards] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     loadCategories();
@@ -34,12 +36,6 @@ function App() {
       setCards([]);
     }
   };
-  
-  // Update the useEffect dependency array to ensure it refreshes when needed
-  useEffect(() => {
-    loadCategories();
-    loadCards();
-  }, [activeCategory]);
 
   const handleCreateCard = async (card) => {
     await window.electron.saveCard({
@@ -79,7 +75,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen relative">
+    <div className={`flex h-screen relative ${currentTheme.background} ${currentTheme.text}`}>
       <TitleBar />
       <Sidebar 
         onCreateClick={() => setShowCreate(true)}
@@ -145,6 +141,14 @@ function App() {
         </AnimatePresence>
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

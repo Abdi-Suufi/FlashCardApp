@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PlusIcon, BookOpenIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 import CategoryManager from './CategoryManager';
+import ThemeSelector from './ThemeSelector';
 
 function Sidebar({ onCreateClick, cardCount, onSelectCategory, activeCategory }) {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -36,6 +37,10 @@ function Sidebar({ onCreateClick, cardCount, onSelectCategory, activeCategory })
           <BookOpenIcon className="w-5 h-5" />
           {!isMinimized && <span className="ml-2">Cards: {cardCount}</span>}
         </div>
+
+        {!isMinimized && (
+          <ThemeSelector />
+        )}
       </div>
 
       <div className={`mt-auto text-sm text-white/60 ${isMinimized ? 'hidden' : ''}`}>

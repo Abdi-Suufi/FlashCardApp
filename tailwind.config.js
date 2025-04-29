@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'card-bg': 'rgba(255, 255, 255, 0.1)',
-        'nav-bg': 'rgba(255, 255, 255, 0.05)',
+        'card-bg': 'var(--card-bg)',
+        'nav-bg': 'var(--nav-bg)',
       },
       backdropBlur: {
         'xs': '2px',
@@ -16,4 +16,4 @@ module.exports = {
     },
   },
   plugins: [],
-} 
+}

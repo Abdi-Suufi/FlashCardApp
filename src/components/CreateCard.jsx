@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../context/ThemeContext';
 
 function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
   const [categories, setCategories] = useState([]);
@@ -8,6 +9,7 @@ function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
     answer: '',
     categoryId: activeCategory || ''
   });
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     loadCategories();
@@ -55,7 +57,7 @@ function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
             name="categoryId"
             value={formData.categoryId}
             onChange={handleChange}
-            className="w-full bg-white/5 rounded-lg border border-white/10 p-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            className={`w-full bg-white/5 rounded-lg ${currentTheme.border} p-3 focus:outline-none focus:ring-2 focus:ring-white/20`}
           >
             <option value="">Uncategorized</option>
             {categories.map(category => (
@@ -74,7 +76,7 @@ function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
             name="question"
             value={formData.question}
             onChange={handleChange}
-            className="w-full bg-white/5 rounded-lg border border-white/10 p-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            className={`w-full bg-white/5 rounded-lg ${currentTheme.border} p-3 focus:outline-none focus:ring-2 focus:ring-white/20`}
             rows="3"
             required
           />
@@ -88,7 +90,7 @@ function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
             name="answer"
             value={formData.answer}
             onChange={handleChange}
-            className="w-full bg-white/5 rounded-lg border border-white/10 p-3 focus:outline-none focus:ring-2 focus:ring-white/20"
+            className={`w-full bg-white/5 rounded-lg ${currentTheme.border} p-3 focus:outline-none focus:ring-2 focus:ring-white/20`}
             rows="3"
             required
           />
@@ -104,7 +106,7 @@ function CreateCard({ onSubmit, onCancel, activeCategory = null }) {
           </button>
           <button
             type="submit"
-            className="btn btn-primary"
+            className={`btn btn-primary bg-gradient-to-r ${currentTheme.buttonHighlight}`}
           >
             Create Card
           </button>
