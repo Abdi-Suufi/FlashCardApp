@@ -44,7 +44,7 @@ function ThemeSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-1 w-full bg-nav-bg backdrop-blur-sm rounded-lg border border-white/10 shadow-lg overflow-hidden z-10">
+        <div className="absolute left-0 bottom-full mb-1 w-full bg-nav-bg backdrop-blur-sm rounded-lg border border-white/10 shadow-lg overflow-hidden z-10">
           {Object.keys(themes).map((themeKey) => (
             <button
               key={themeKey}

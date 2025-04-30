@@ -37,15 +37,19 @@ function Sidebar({ onCreateClick, cardCount, onSelectCategory, activeCategory })
           <BookOpenIcon className="w-5 h-5" />
           {!isMinimized && <span className="ml-2">Cards: {cardCount}</span>}
         </div>
+      </div>
 
+      <div className="mt-auto flex flex-col gap-3">
+        {!isMinimized && (
+          <div className="text-sm text-white/60">
+            <p>Press Space to flip cards</p>
+            <p>Use ← → arrows to navigate</p>
+          </div>
+        )}
+        
         {!isMinimized && (
           <ThemeSelector />
         )}
-      </div>
-
-      <div className={`mt-auto text-sm text-white/60 ${isMinimized ? 'hidden' : ''}`}>
-        <p>Press Space to flip cards</p>
-        <p>Use ← → arrows to navigate</p>
       </div>
     </nav>
   );
