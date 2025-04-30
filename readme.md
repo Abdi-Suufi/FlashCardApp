@@ -2,7 +2,7 @@
 
 A beautiful, modern flashcard application built with Electron, React, and Tailwind CSS, featuring interactive cards, customizable themes, and category management.
 
-![Flashcard App Screenshot](https://via.placeholder.com/800x450)
+![image](https://github.com/user-attachments/assets/9b3e53c8-2514-49db-87f9-1a2dae1eb820)
 
 ## Features
 
@@ -32,7 +32,7 @@ A beautiful, modern flashcard application built with Electron, React, and Tailwi
 1. Clone the repository:
    ```
    git clone https://github.com/Abdi-Suufi/FlashCardApp.git
-   cd flashcard-app
+   cd FlashCardApp
    ```
 
 2. Install dependencies:
